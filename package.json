@@ -1,6 +1,6 @@
 {
   "name": "remote-fs",
-  "version": "0.1.1",
+  "version": "0.1.2-rc1",
   "description": "Remote filesystem on s3",
   "main": "index.js",
   "scripts": {
@@ -22,9 +22,12 @@
     "lodash": "^4.17.4",
     "minimatch": "^3.0.4",
     "readable-stream": "^2.3.3",
+    "require-from-string": "^2.0.1",
     "s3-stream": "^1.0.0",
+    "s3-streams": "^0.3.0",
     "through2": "^2.0.3",
     "through2-map": "^3.0.0",
-    "vinyl": "^2.1.0"
+    "vinyl": "^2.1.0",
+    "vinyl-buffer": "^1.0.1"
   }
 }

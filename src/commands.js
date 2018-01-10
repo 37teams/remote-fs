@@ -6,6 +6,8 @@ const _ = require('lodash')
 const Vinyl = require('vinyl')
 const through2 = require('through2')
 const deasync = require('deasync')
+const buffer = require('vinyl-buffer')
+const requireFromString = require('require-from-string')
 
 const S3g = require('./s3g')
 const vinylStream = require('./vinyl-stream')
@@ -117,6 +119,54 @@ const StreamContent = function () {
   return Object.create(proto)
 }
 
+// TODO: move to its own package
+const RequireGlob = function () {
+  const proto = {
+    requireGlob: function (globs, options) {
+      const modules = {}
+
+      const requireS3 = through2.obj(function (file, encoding, next) {
+        modules[file.relative] = requireFromString(file.content.toString('utf-8'))
+        next()
+      })
+
+      return new Promise((resolve, reject) => {
+        this.src(globs, options = {})
+        .pipe(buffer)
+        .pipe(requireS3)
+        .on('error', (err) => {
+          console.log('Error requiring glob')
+          reject(err)
+        })
+        .on('finish', () => {
+          console.log('Finished requiring glob')
+          resolve(modules)
+        })
+      })
+    },
+
+    requireGlobSync: function (globs, options) {
+      let done = false
+      let modules = {}
+
+      this.requireGlob(globs, options)
+        .then((result) => {
+          done = true
+          modules = result
+        })
+
+      deasync.loopWhile(function () {
+        return !done
+      })
+
+      // Content is ready to return
+      return modules
+    }
+  }
+
+  return Object.create(proto)
+}
+
 const ReadFile = function () {
   const proto = {
     readFile (path, options) {
@@ -151,9 +201,9 @@ const ReadFile = function () {
         })
 
       // Block without blocking full thread
-      deasync.loopWhile(function(){
+      deasync.loopWhile(function () {
         return !done
-      }
+      })
 
       // Content is ready to return
       return fileContent
@@ -255,7 +305,8 @@ const S3Bindings = function () {
     WriteFile.call(this),
     MakeDirectory.call(this),
     CopyFilesTo.call(this),
-    StreamSource.call(this)
+    StreamSource.call(this),
+    RequireGlob.call(this)
   )
 }
 
