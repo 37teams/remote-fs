@@ -119,6 +119,32 @@ const StreamContent = function () {
   return Object.create(proto)
 }
 
+const ReadFile = function () {
+  const proto = {
+    readFile (path, options) {
+      const download = this.createReadStream(path)
+
+      return new Promise(function (resolve, reject) {
+        download.on('error', (err) => {
+          reject(err)
+        })
+        download.on('end', () => {
+          resolve()
+        })
+
+        // Trigger read stream
+        download.read(0)
+      })
+    },
+
+    readFileSync () {
+
+    }
+  }
+
+  return Object.create(proto)
+}
+
 const WriteFile = function () {
   const proto = {
     writeFile (path, data) {
@@ -207,6 +233,7 @@ const S3Bindings = function () {
     this,
     ListFiles.call(this),
     StreamContent.call(this),
+    ReadFile.call(this),
     WriteFile.call(this),
     MakeDirectory.call(this),
     CopyFilesTo.call(this),
