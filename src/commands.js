@@ -5,9 +5,7 @@ const s3s = require('s3-streams')
 const _ = require('lodash')
 const Vinyl = require('vinyl')
 const through2 = require('through2')
-
-// TODO: add sync interface
-// const deasync = require('deasync')
+const deasync = require('deasync')
 
 const S3g = require('./s3g')
 const vinylStream = require('./vinyl-stream')
@@ -122,6 +120,8 @@ const StreamContent = function () {
 const ReadFile = function () {
   const proto = {
     readFile (path, options) {
+      let fileContent = null
+
       const download = this.createReadStream(path)
 
       return new Promise(function (resolve, reject) {
@@ -129,16 +129,34 @@ const ReadFile = function () {
           reject(err)
         })
         download.on('end', () => {
-          resolve()
+          resolve(fileContent)
         })
 
         // Trigger read stream
-        download.read(0)
+        download.on('data', (chunk) => {
+          console.log('getting data from s3 file')
+          fileContent =  chunk.toString('utf8')
+        })
       })
     },
 
-    readFileSync () {
+    readFileSync (path, options) {
+      let done = false
+      let fileContent = null
 
+      this.readFile(path, options)
+        .then((content) => {
+          fileContent = content
+          done = true
+        })
+
+      // Block without blocking full thread
+      deasync.loopWhile(function(){
+        return !done
+      }
+
+      // Content is ready to return
+      return fileContent
     }
   }
 
