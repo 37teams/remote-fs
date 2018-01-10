@@ -15,5 +15,16 @@
   "bugs": {
     "url": "https://github.com/Gumspace/remote-fs/issues"
   },
-  "homepage": "https://github.com/Gumspace/remote-fs#readme"
+  "homepage": "https://github.com/Gumspace/remote-fs#readme",
+  "dependencies": {
+    "aws-sdk": "^2.179.0",
+    "deasync": "^0.1.12",
+    "lodash": "^4.17.4",
+    "minimatch": "^3.0.4",
+    "readable-stream": "^2.3.3",
+    "s3-stream": "^1.0.0",
+    "through2": "^2.0.3",
+    "through2-map": "^3.0.0",
+    "vinyl": "^2.1.0"
+  }
 }
