@@ -125,14 +125,17 @@ const RequireGlob = function () {
     requireGlob: function (globs, options) {
       const modules = {}
 
+      console.log({globs})
+
       const requireS3 = through2.obj(function (file, encoding, next) {
+        console.log({file})
         modules[file.relative] = requireFromString(file.content.toString('utf-8'))
         next()
       })
 
       return new Promise((resolve, reject) => {
         this.src(globs, options = {})
-        .pipe(buffer)
+        .pipe(buffer())
         .pipe(requireS3)
         .on('error', (err) => {
           console.log('Error requiring glob')
@@ -140,19 +143,30 @@ const RequireGlob = function () {
         })
         .on('finish', () => {
           console.log('Finished requiring glob')
+          console.log(modules)
           resolve(modules)
+        })
+        .on('close', () => {
+          console.log('Closing requiring glob')
+          //resolve(modules)
         })
       })
     },
 
     requireGlobSync: function (globs, options) {
+      console.log('require glob sync.....')
       let done = false
       let modules = {}
 
       this.requireGlob(globs, options)
         .then((result) => {
+          console.log('require globbing done')
           done = true
           modules = result
+        })
+        .catch((err) => {
+          console.log(err)
+          done = true
         })
 
       deasync.loopWhile(function () {
