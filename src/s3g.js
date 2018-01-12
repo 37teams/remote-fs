@@ -60,7 +60,6 @@ class S3g extends Readable {
 
     this.s3.listObjectsV2(params, (err, data) => {
       if (err) {
-        console.log({globsrr: err})
         process.nextTick(() => this.emit('error', err))
         return
       }
@@ -69,7 +68,6 @@ class S3g extends Readable {
 
       files.forEach((file) => {
         if (this._match(file.Key)) {
-          console.log(`pushing match file ${file.Key}`)
           this.push(file)
         }
       })

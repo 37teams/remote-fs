@@ -25,9 +25,6 @@ const CopyFilesTo = {
         const destination = self.createWriteStream(Path.join(dest, file.relative))
 
         source
-          .on('open', function open (object) {
-            console.log('Downloading', object.ContentLength, 'bytes.')
-          })
           .on('error', function error (err) {
             console.error('Unable to download file:', err)
             reject(err)
@@ -112,10 +109,7 @@ const RequireGlob = {
   requireGlob: function (globs, options) {
     const modules = {}
 
-    console.log({globs})
-
     const requireS3 = through2.obj(function (file, encoding, next) {
-      console.log({file})
       modules[file.relative] = requireFromString(file.content.toString('utf-8'))
       next()
     })
@@ -129,8 +123,6 @@ const RequireGlob = {
         reject(err)
       })
       .on('finish', () => {
-        console.log('Finished requiring glob')
-        console.log(modules)
         resolve(modules)
       })
       .on('close', () => {
@@ -141,13 +133,11 @@ const RequireGlob = {
   },
 
   requireGlobSync: function (globs, options) {
-    console.log('require glob sync.....')
     let done = false
     let modules = {}
 
     this.requireGlob(globs, options)
       .then((result) => {
-        console.log('require globbing done')
         done = true
         modules = result
       })
@@ -181,8 +171,7 @@ const ReadFile = {
 
       // Trigger read stream
       download.on('data', (chunk) => {
-        console.log('getting data from s3 file')
-        fileContent =  chunk.toString('utf8')
+        fileContent = chunk.toString('utf8')
       })
     })
   },
