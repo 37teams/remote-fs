@@ -13,7 +13,11 @@ module.exports = function RemoteFileSystemFactory (options) {
   // Bucket is private and cannot be change after instantiation
   const root = options.context
 
-  this.getContext = () => root
+  console.log('linked remote fs')
 
-  return _.extend(this, DefaultBindings())
+  return _.extend({
+    getContext () {
+      return root
+    }
+  }, DefaultBindings())
 }
