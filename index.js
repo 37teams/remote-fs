@@ -69,6 +69,10 @@ module.exports = function RemoteFileSystemFactory (options) {
     return bindings.readdirp(path)
   }
 
+  function copyDir (path) {
+    return bindings.copyDir(path)
+  }
+
   function createReadStream (path, options) {
     return bindings.createReadStream(path, options)
   }
@@ -94,6 +98,7 @@ module.exports = function RemoteFileSystemFactory (options) {
     readFile,
     readdirp,
     mkdir,
+    copyDir,
     src
   }
 }
