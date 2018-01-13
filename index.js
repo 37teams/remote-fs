@@ -24,7 +24,7 @@ module.exports = function RemoteFileSystemFactory (options) {
 
   const bindings = options.binding
     ? options.bindings(root, options)
-    : s3fsFactory(root, options)
+    : s3fsFactory(root)
 
   function expectedError (error) {
     return (error.code === 304 || error.code === 412)
