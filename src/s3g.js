@@ -81,4 +81,6 @@ class S3g extends Readable {
   }
 }
 
-module.exports = S3g
+module.exports = function Factory (globs, options) {
+  return new S3g(globs, options)
+}
