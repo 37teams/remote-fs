@@ -4,8 +4,8 @@ const _ = require('lodash')
 const through2 = require('through2')
 const S3FS = require('s3fs')
 
-const S3g = require('./s3g')
-const vinylStream = require('./vinyl-stream')
+const S3g = require('./src/s3g')
+const vinylStream = require('./src/vinyl-stream')
 
 function s3fsFactory (bucket, options) {
   return new S3FS(bucket, options)
@@ -62,19 +62,19 @@ module.exports = function RemoteFileSystemFactory (options) {
   }
 
   function readFile (path, options) {
-    bindings.readFile(path, options)
+    return bindings.readFile(path, options)
   }
 
   function readdirp (path) {
-    bindings.readdirp(path)
+    return bindings.readdirp(path)
   }
 
   function createReadStream (path, options) {
-    bindings.createReadStream(path, options)
+    return bindings.createReadStream(path, options)
   }
 
   function createWriteStream (path, options) {
-    bindings.createWriteStream(path, options)
+    return bindings.createWriteStream(path, options)
   }
 
   function createWriteThroughStream (path, options) {
