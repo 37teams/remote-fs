@@ -1,6 +1,6 @@
 {
   "name": "remote-fs",
-  "version": "0.2.2",
+  "version": "1.0.0-rc1",
   "description": "Remote filesystem on s3",
   "main": "index.js",
   "scripts": {
@@ -25,9 +25,14 @@
     "require-from-string": "^2.0.1",
     "s3-stream": "^1.0.0",
     "s3-streams": "^0.3.0",
+    "s3fs": "^2.5.0",
     "through2": "^2.0.3",
     "through2-map": "^3.0.0",
     "vinyl": "^2.1.0",
     "vinyl-buffer": "^1.0.1"
+  },
+  "devDependencies": {
+    "code": "^5.1.2",
+    "lab": "^15.2.0"
   }
 }
