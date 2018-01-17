@@ -1,6 +1,6 @@
 {
   "name": "remote-fs",
-  "version": "1.2.0",
+  "version": "1.3.0",
   "description": "Remote filesystem on s3",
   "main": "index.js",
   "scripts": {
