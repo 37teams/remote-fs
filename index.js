@@ -93,6 +93,10 @@ module.exports = function RemoteFileSystemFactory (options) {
     })
   }
 
+  function exists (path) {
+    return bindings.exists(path)
+  }
+
   return {
     createReadStream,
     createWriteStream,
@@ -103,6 +107,7 @@ module.exports = function RemoteFileSystemFactory (options) {
     readdirp,
     mkdir,
     copyDir,
-    src
+    src,
+    exists
   }
 }
