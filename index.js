@@ -34,8 +34,8 @@ module.exports = function RemoteFileSystemFactory (options) {
     return root
   }
 
-  function writeFile (path, data) {
-    return bindings.writeFile(path, data)
+  function writeFile (path, data, options) {
+    return bindings.writeFile(path, data, options)
   }
 
   function mkdir (path) {
