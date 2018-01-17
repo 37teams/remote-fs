@@ -83,7 +83,11 @@ module.exports = function RemoteFileSystemFactory (options) {
 
   function createWriteThroughStream (path, options) {
     return through2.obj(function (file, encoding, next) {
-      writeFile(Path.join(path, file.path), file.contents, options)
+      const params = {
+        ContentType: file.contentType
+      }
+
+      writeFile(Path.join(path, file.path), file.contents, _.extend(options, params))
         .then(() => next())
         .catch((err) => next(err))
     })
